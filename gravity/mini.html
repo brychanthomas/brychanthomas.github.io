@@ -7,20 +7,20 @@ var numberOfObjects = 0; //used to give each object an ID so it can be recognise
 var paused = false;
 
 function setup() { //runs once when program starts
-	objects = [new object(40, createVector(400,400), createVector(-2.5,0)),
-	new object(40, createVector(400,200), createVector(2.5,0))];
+	objects = [new object(40, createVector(800,800), createVector(-2.5,0)),
+	new object(40, createVector(800,1000), createVector(2.5,0))];
 	
-	createCanvas(700, 500);
+	createCanvas(6000, 3000);
 }
-	
+
 function draw() { //runs every frame
 	if (paused === true) {return 0}
 	background(25);
 	for (var obj=0; obj<objects.length; obj++) {
 		if (objects[obj] != undefined) {
-			objects[obj].update();
+			objects[obj].update()
 			if (objects[obj] != undefined) {
-				objects[obj].show();
+				objects[obj].show()
 			}
 		}
 	}
@@ -62,7 +62,7 @@ class object { //a class used to create an object (planet, particle or whatever 
 			red = random(255);
 			green = random(255);
 			blue = random(255);
-			brightness  =  Math.sqrt(0.241 * Math.pow(red,2) + 0.691 * Math.pow(green,2) + 0.068 * Math.pow(blue,2));
+			brightness  =  Math.sqrt(0.241 * Math.pow(red,2) + 0.691 * Math.pow(green,2) + 0.068 * Math.pow(blue,2))
 		}
 		this.colour = color(red, green, blue);
 	}
@@ -132,7 +132,7 @@ class object { //a class used to create an object (planet, particle or whatever 
 		beginShape();
 		stroke(this.colour);
 		for (let i=0; i < this.trailPositions.length; i++) {
-			var pos = this.trailPositions[i];
+			var pos = this.trailPositions[i]
 			vertex(pos.x, pos.y);
 		}
 		endShape();
