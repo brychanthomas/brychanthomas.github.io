@@ -12,15 +12,15 @@ function setup() { //runs once when program starts
 	
 	createCanvas(700, 500);
 }
-
+	
 function draw() { //runs every frame
 	if (paused === true) {return 0}
 	background(25);
-	for (var obj=0; obj&lt;objects.length; obj++) {
+	for (var obj=0; obj<objects.length; obj++) {
 		if (objects[obj] != undefined) {
-			objects[obj].update()
+			objects[obj].update();
 			if (objects[obj] != undefined) {
-				objects[obj].show()
+				objects[obj].show();
 			}
 		}
 	}
@@ -58,17 +58,17 @@ class object { //a class used to create an object (planet, particle or whatever 
 		let blue = random(255);
 		//formula for determining brightness of an RGB colour
 		let brightness  =  Math.sqrt(0.241 * Math.pow(red,2) + 0.691 * Math.pow(green,2) + 0.068 * Math.pow(blue,2))
-		while (brightness &lt; 100) {
+		while (brightness < 100) {
 			red = random(255);
 			green = random(255);
 			blue = random(255);
-			brightness  =  Math.sqrt(0.241 * Math.pow(red,2) + 0.691 * Math.pow(green,2) + 0.068 * Math.pow(blue,2))
+			brightness  =  Math.sqrt(0.241 * Math.pow(red,2) + 0.691 * Math.pow(green,2) + 0.068 * Math.pow(blue,2));
 		}
 		this.colour = color(red, green, blue);
 	}
 	calculate_force_with(other_object) { //use gravity equation to find x and y force components with other object
 		var distance = Math.sqrt(Math.pow(this.x-other_object.x,2) + Math.pow(this.y-other_object.y,2));
-		if (distance &lt; 30) {
+		if (distance < 30) {
 			this.collide(other_object);
 			return createVector(0,0);
 		}
@@ -77,8 +77,8 @@ class object { //a class used to create an object (planet, particle or whatever 
 		var direction = Math.atan(Math.abs(this.y-other_object.y) / Math.abs(this.x-other_object.x));
 		var fx = force * Math.abs(Math.cos(direction));
 		var fy = force * Math.abs(Math.sin(direction));
-		if (other_object.x &lt; this.x) {fx = fx*-1}
-		if (other_object.y &lt; this.y) {fy = fy*-1}
+		if (other_object.x < this.x) {fx = fx*-1}
+		if (other_object.y < this.y) {fy = fy*-1}
 		this.fx = fx;
 		this.fy = fy;
 		return createVector(fx,fy);
@@ -92,7 +92,7 @@ class object { //a class used to create an object (planet, particle or whatever 
 		this.velocity = createVector (momentumSum.x / this.mass, momentumSum.y / this.mass);
 		var fx=0;
 		var fy=0;
-		for (let i=0; i&lt;objects.length; i++) {
+		for (let i=0; i<objects.length; i++) {
 			if (objects[i].number == other_object.number) {
 				objects.splice(i, 1);
 				break
@@ -114,7 +114,16 @@ class object { //a class used to create an object (planet, particle or whatever 
 		this.y = this.y + this.velocity.y;
 	}
 	update () { //update object's position and its trail
-		for (let obj=0; obj 500) {
+		for (let obj=0; obj<objects.length; obj++) {
+			if (this.number != objects[obj].number) {
+				var force = this.calculate_force_with(objects[obj]);
+				var acceleration = this.calculate_acceleration(force);
+				this.accelerate(acceleration);
+			}
+		}
+		this.move();
+		this.trailPositions.push(createVector(this.x,this.y));
+		if (this.trailPositions.length > 500) {
 			this.trailPositions.splice(0,1);
 		}
 	}
@@ -122,8 +131,8 @@ class object { //a class used to create an object (planet, particle or whatever 
 		noFill();
 		beginShape();
 		stroke(this.colour);
-		for (let i=0; i &lt; this.trailPositions.length; i++) {
-			var pos = this.trailPositions[i]
+		for (let i=0; i < this.trailPositions.length; i++) {
+			var pos = this.trailPositions[i];
 			vertex(pos.x, pos.y);
 		}
 		endShape();
