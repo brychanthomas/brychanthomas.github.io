@@ -4,7 +4,7 @@ var numberOfObjects = 0; //used to give each object an ID so it can be recognise
 var paused = false;
 
 function setup() { //runs once when program starts
-	objects = [new object(40, createVector(800,800), createVector(-2.5,0)), new object(40, createVector(800,1000), createVector(2.5,0))];
+	objects = [new object(40, createVector(500,500), createVector(-2.5,0)), new object(40, createVector(500,700), createVector(2.5,0))];
 	
 	createCanvas(6000, 3000);
 }
