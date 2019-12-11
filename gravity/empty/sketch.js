@@ -6,7 +6,7 @@ var paused = false;
 function setup() { //runs once when program starts
 	//objects = [new object(40, createVector(800,800), createVector(-2.5,0)), new object(40, createVector(800,1000), createVector(2.5,0))];
 	
-	createCanvas(6000, 3000);
+	createCanvas(3000, 3000);
 }
 
 function draw() { //runs every frame
