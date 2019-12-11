@@ -12,6 +12,10 @@ function setup() { //runs once when program starts
 function draw() { //runs every frame
 	if (paused === true) {return 0}
 	background(25);
+	let fps = frameRate();
+	fill(255);
+	stroke(0);
+	text("FPS: " + fps.toFixed(2), 10, 10);
 	for (var obj=0; obj<objects.length; obj++) {
 		if (objects[obj] != undefined) {
 			objects[obj].update()
