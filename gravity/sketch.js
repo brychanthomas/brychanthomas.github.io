@@ -4,18 +4,14 @@ var numberOfObjects = 0; //used to give each object an ID so it can be recognise
 var paused = false;
 
 function setup() { //runs once when program starts
-	objects = [new object(40, createVector(500,500), createVector(-2.5,0)), new object(40, createVector(500,700), createVector(2.5,0))];
+	objects = [new object(40, createVector(300,200), createVector(-2.5,0)), new object(40, createVector(300,400), createVector(2.5,0))];
 	
-	createCanvas(3000, 3000);
+	createCanvas(windowWidth, windowHeight);
 }
 
 function draw() { //runs every frame
 	if (paused === true) {return 0}
 	background(25);
-	let fps = frameRate();
-	fill(255);
-	stroke(0);
-	text("FPS: " + fps.toFixed(2), 10, 10);
 	for (var obj=0; obj<objects.length; obj++) {
 		if (objects[obj] != undefined) {
 			objects[obj].update()
