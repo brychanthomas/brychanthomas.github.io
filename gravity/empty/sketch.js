@@ -64,7 +64,7 @@ class object { //a class used to create an object (planet, particle or whatever 
 	}
 	calculate_force_with(other_object) { //use gravity equation to find x and y force components with other object
 		var distance = Math.sqrt(Math.pow(this.x-other_object.x,2) + Math.pow(this.y-other_object.y,2));
-		if (distance < 30) {
+		if (distance < this.mass/2) {
 			this.collide(other_object);
 			return createVector(0,0);
 		}
