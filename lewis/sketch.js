@@ -1,9 +1,9 @@
-var atoms = [];
-var atom_counter = 0;
-var Elements;
-var keysPressed = "";
+var atoms = []; //array to hold each atom
+var atom_counter = 0; //counts number of atoms to give each new atom an ID
+var Elements; //dictionary to hold atomic number, symbol and colour of each element
+var keysPressed = ""; //string holding all of the keys pressed so far, for two letter symbols such as 'Cl'
 
-class Element {
+class Element { //class to store information about each element
 	constructor (atomic_number, symbol, colour) {
 		this.atomic_number = atomic_number;
 		this.symbol = symbol;
@@ -11,7 +11,7 @@ class Element {
 		if (atomic_number < 3) {
 			this.outer_shell_capacity = 2;
 			this.valence_electrons = this.atomic_number;
-		} else {
+		} else { //calculate electrons in outer shell of atom based on atomic number
 			this.outer_shell_capacity = 8;
 			let VE = atomic_number-2;
 			this.valence_electrons = VE;
@@ -25,7 +25,7 @@ class Element {
 	}
 }
 
-class Atom {
+class Atom { //class to create and render each atom, its electrons and bonds between atoms
 	constructor(elem,mousex,mousey){
 		this.bond_directions=[];
 		this.ID = atom_counter;
@@ -99,11 +99,11 @@ class Atom {
 			textStyle(NORMAL);
 		}
 		text(this.symbol, this.x-7, this.y+7);
-		let nonbonding_electrons = count_in_array(this.outer_shell, '1');
+		let nonbonding_electrons = count_in_array(this.outer_shell, '1'); //count electrons not used for bonding
 		let ydirections = [createVector(this.x, this.y-25),createVector(this.x, this.y+25)];
 		let xdirections = [createVector(this.x-25, this.y),createVector(this.x+25, this.y)];
 		let electrons_per_direction = nonbonding_electrons / (4-this.bond_directions.length)
-		for (let dir of ydirections) {
+		for (let dir of ydirections) { //place electrons on side of atom with no bonds if possible
 			if (!vector_in_array(this.bond_directions,dir) || electrons_per_direction > 2) {
 				if (nonbonding_electrons > 0) {
 					nonbonding_electrons = nonbonding_electrons-1;
@@ -136,7 +136,7 @@ class Atom {
 }
 
 function setup(){
-	Elements = {
+	Elements = { //elements are stored in a dictionary with the key being the keyboard buttons you must press
 		"o": new Element(8, "O", color(255, 0, 0)),
 		"c": new Element(6, "C", color(0,0,0)),
 		"h": new Element(1, "H", color(150 ,150,150)),
@@ -153,10 +153,10 @@ function setup(){
 	To add an atom at the mouse position, press a keyboard key.
 	To add an atom with a two letter symbol, hold shift when pressing the first letter and then press the second letter without shift.
 	Click between atoms to add covalent bonds.
-	Enjoy!`);
+	Enjoy!`); //instructions
 }
 
-function draw(){
+function draw(){ //render each atom and their bonds every frame
 	background(255);
 	for (let a of atoms) {
 		a.render_bonds();
@@ -226,7 +226,7 @@ function mouseClicked() { //add bonds when mouse clicked
 		console.log(atom1.ID, atom1.bond_lines);
 		console.log(atom2.ID, atom2.bond_lines);
 	} else if (a2_empty > 1 && a1_unbonded > 1 && atom1.symbol !== atom2.symbol) { //if one has non-full outer shell and other has unbonded electrons
-		atom1.outer_shell[atom1.outer_shell.indexOf(1)] = 2;
+		atom1.outer_shell[atom1.outer_shell.indexOf(1)] = 2; //form coordinate bond
 		atom1.outer_shell[atom1.outer_shell.indexOf(1)] = 2;
 		atom2.outer_shell[atom2.outer_shell.indexOf(0)] = 2;
 		atom2.outer_shell[atom2.outer_shell.indexOf(0)] = 2;
