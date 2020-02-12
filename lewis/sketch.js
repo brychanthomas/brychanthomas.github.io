@@ -153,6 +153,7 @@ function setup(){
 	To add an atom at the mouse position, press a keyboard key.
 	To add an atom with a two letter symbol, hold shift when pressing the first letter and then press the second letter without shift.
 	Click between atoms to add covalent bonds.
+	The elements available are O, C, H, N, F, Cl, Br, S, P and Si.
 	Enjoy!`); //instructions
 }
 
