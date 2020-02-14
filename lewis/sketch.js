@@ -226,14 +226,14 @@ function mouseClicked() { //add bonds when mouse clicked
 		atom2.bond_lines.push(atom1.ID);
 		console.log(atom1.ID, atom1.bond_lines);
 		console.log(atom2.ID, atom2.bond_lines);
-	} else if (a2_empty > 1 && a1_unbonded > 1 && atom1.symbol !== atom2.symbol) { //if one has non-full outer shell and other has unbonded electrons
+	} else if (a2_empty > 1 && a1_unbonded > 1) { //if one has non-full outer shell and other has unbonded electrons
 		atom1.outer_shell[atom1.outer_shell.indexOf(1)] = 2; //form coordinate bond
 		atom1.outer_shell[atom1.outer_shell.indexOf(1)] = 2;
 		atom2.outer_shell[atom2.outer_shell.indexOf(0)] = 2;
 		atom2.outer_shell[atom2.outer_shell.indexOf(0)] = 2;
 		atom1.bond_lines.push(atom2.ID);
 		atom2.bond_lines.push(atom1.ID);
-	} else if (a1_empty > 1 && a2_unbonded > 1 && atom1.symbol !== atom2.symbol) {
+	} else if (a1_empty > 1 && a2_unbonded > 1) {
 		atom2.outer_shell[atom2.outer_shell.indexOf(1)] = 2;
 		atom2.outer_shell[atom2.outer_shell.indexOf(1)] = 2;
 		atom1.outer_shell[atom1.outer_shell.indexOf(0)] = 2;
