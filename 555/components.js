@@ -11,28 +11,27 @@ class Voltage_divider { //array of resistors
     this.resistances = resistances;
   }
   update() { //update voltage at each connection point
-    let voltageLeft = voltages[this.connections[0]];
-    let voltageRight = voltages[this.connections[this.connections.length-1]]
-    let minVoltage = Math.min(voltageLeft, voltageRight);
-    voltageLeft = voltageLeft - minVoltage;
+    let voltageLeft = voltages[this.connections[0]]; //voltage on leftmost pin of component
+    let voltageRight = voltages[this.connections[this.connections.length-1]] //voltage on rightmost pin of component
+    let minVoltage = Math.min(voltageLeft, voltageRight); //minimum of the two voltages
+    voltageLeft = voltageLeft - minVoltage; //take away the minimum voltage
     voltageRight = voltageRight - minVoltage;
-    let conns = this.connections;
+    let conns = this.connections; //shortened to make it easier
     let resis = this.resistances;
-    if (voltageRight < voltageLeft) {
-      conns = conns.reverse();
+    if (voltageRight < voltageLeft) { //if voltage on right is smaller than on left
+      conns = conns.reverse(); //reverse everything
       resis = resis.reverse();
       let temp = voltageRight;
-      voltageRight = voltageLeft;
+      voltageRight = voltageLeft; //swap the voltages around
       voltageLeft = voltageRight;
     }
     let resistanceSoFar = 0;
     let voltageHere = 0;
-    for (let r=0;r<resis.length-1;r++) {
+    for (let r=0;r<resis.length-1;r++) { //for each connection going from the side with the smallest voltage to the greatest voltage
       resistanceSoFar += resis[r];
-      voltageHere = (resistanceSoFar/this.totalResistance)*voltageRight + minVoltage;
-      voltages[conns[r+1]] = voltageHere;
+      voltageHere = (resistanceSoFar/this.totalResistance)*voltageRight + minVoltage; //calculate the voltage at this connection
+      voltages[conns[r+1]] = voltageHere; //set the voltage
     }
-    this.current = voltageRight / this.totalResistance;
   }
 }
 
@@ -64,12 +63,13 @@ class Capacitor { //simulates capacitor with one end connected to ground
   update() { //update voltage on capacitor pin
     let timer = globalTimer - this.timerOffset;
     if (this.state === 'charging') {
-      voltages[this.connection1] = voltages['b+'] - this.prevVoltage;
+      voltages[this.connection1] = voltages['b+'] - this.prevVoltage; //voltage charging started from
+      //use this equation to calculate voltage on anode: http://www.learningaboutelectronics.com/Articles/Capacitor-charging.php
       voltages[this.connection1] *= 1-(Math.E**(-timer / (this.capacitance * this.chargeResistance)));
       voltages[this.connection1] += this.prevVoltage;
-      this.topVoltage = voltages[this.connection1];
     } else {
       voltages[this.connection1] = this.prevVoltage;
+      //if it's discharging use this equation instead: http://www.learningaboutelectronics.com/Articles/Capacitor-discharging.php
       voltages[this.connection1] *= Math.E**(-timer / (this.capacitance * this.dischargeResistance));
     }
   }
@@ -119,10 +119,10 @@ class SR_flip_flop {
     let highLevel = voltages[this.Vcc]  * 2/3;
     let s = voltages[this.S];
     let r = voltages[this.R];
-    if (s < highLevel && r > highLevel) {
+    if (s < highLevel && r > highLevel) { //s = 0 and r = 1
       voltages[this.Q] = voltages[this.ground];
       voltages[this.QComplement] = voltages[this.Vcc];
-    } else if (s > highLevel && r < highLevel) {
+    } else if (s > highLevel && r < highLevel) { //s = 1 and r = 0
       voltages[this.Q] = voltages[this.Vcc];
       voltages[this.QComplement] = voltages[this.ground];
     }
