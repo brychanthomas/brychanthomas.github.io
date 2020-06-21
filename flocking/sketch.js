@@ -1,4 +1,4 @@
-class Flocker {
+class Boid {
   constructor(x, y) {
     this.position = createVector(x, y);
     this.velocity = createVector(0, 0);
@@ -7,24 +7,32 @@ class Flocker {
   }
 
   applyForce(force) {
-    acceleration.add(force.div(this.mass));
+    this.acceleration.add(force.div(this.mass));
   }
 
   display() {
     circle(this.position.x, this.position.y, 10);
+    this.position.x = this.position.x % width;
+    this.position.y = this.position.y % height;
   }
 
   update() {
-    velocity.add(acceleration);
-    position.add(velocity);
-    acceleration.mult(0);
+    this.velocity.add(this.acceleration);
+    this.position.add(this.velocity);
+    this.acceleration.mult(0);
   }
 }
 
+var a;
+
 function setup() {
   createCanvas(800, 500);
+  a = new Boid(100, 100);
 }
 
 function draw() {
-
+  background(200);
+  a.applyForce(createVector(0, 0.05));
+  a.update();
+  a.display();
 }
