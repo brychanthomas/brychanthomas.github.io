@@ -1,7 +1,7 @@
 class Boid {
   constructor(x, y) {
     this.position = createVector(x, y);
-    this.velocity = createVector(0, 0);
+    this.velocity = createVector(random(3, 5), random(3, 5));
     this.acceleration = createVector(0,0);
     this.mass = 1;
     this.maxSpeed = 7;
@@ -15,6 +15,7 @@ class Boid {
   draw() {
     //circle(this.position.x, this.position.y, 10);
     push();
+    fill(230);
     translate(this.position.x, this.position.y);
     rotate(this.velocity.heading());
     triangle(0, -6, 0, 6, 15, 0);
@@ -50,7 +51,7 @@ class Boid {
   }
 
   separate(otherBoids) {
-    var desiredSeparation = 50;
+    var desiredSeparation = 40;
     var sum = createVector(0,0);
     var count = 0;
     for (let boid of otherBoids) {
@@ -96,15 +97,36 @@ class Boid {
     return createVector(0,0);
   }
 
+  cohesion(otherBoids) {
+    var sum = createVector(0,0);
+    var count = 0;
+    var neighbourhoodRadius = 50;
+    for (let boid of otherBoids) {
+      let distance = p5.Vector.dist(this.position, boid.position);
+      if (distance > 0 && distance < neighbourhoodRadius) {
+        sum.add(boid.position);
+        count++;
+      }
+    }
+    if (count > 0) {
+      sum.div(count);
+      return this.seek(sum);
+    }
+    return createVector(0,0);
+  }
+
   applyBehaviours(boidsArray) {
     var separateForce = this.separate(boidsArray);
     var alignForce = this.align(boidsArray);
+    var cohesionForce = this.cohesion(boidsArray);
 
-    separateForce.mult(0.2);
+    separateForce.mult(0.6);
     alignForce.mult(1);
+    cohesionForce.mult(1);
 
     this.applyForce(separateForce);
     this.applyForce(alignForce);
+    this.applyForce(cohesionForce);
   }
 }
 
@@ -112,7 +134,7 @@ class Flock {
   constructor(numBoids) {
     this.boidsArray = [];
     for (let i=0; i<numBoids; i++) {
-      this.boidsArray.push(new Boid(random(500, 510), random(200, 210)));
+      this.boidsArray.push(new Boid(random(500, 550), random(200, 250)));
     }
   }
   update() {
@@ -132,11 +154,11 @@ var a;
 
 function setup() {
   createCanvas(800, 500);
-  a = new Flock(20);
+  a = new Flock(80);
 }
 
 function draw() {
-  background(200);
+  background(40);
   a.update();
   a.draw();
 }
