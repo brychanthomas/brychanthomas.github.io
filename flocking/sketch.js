@@ -1,11 +1,11 @@
 class Boid {
   constructor(x, y) {
     this.position = createVector(x, y);
-    this.velocity = createVector(random(3, 5), random(3, 5));
+    this.velocity = createVector(0, 0);
     this.acceleration = createVector(0,0);
     this.mass = 1;
-    this.maxSpeed = 7;
-    this.maxForce = 0.1;
+    this.maxSpeed = 5;
+    this.maxForce = 0.05;
   }
 
   applyForce(force) {
@@ -120,9 +120,10 @@ class Boid {
     var alignForce = this.align(boidsArray);
     var cohesionForce = this.cohesion(boidsArray);
 
-    separateForce.mult(0.6);
-    alignForce.mult(1);
-    cohesionForce.mult(1);
+    //adjust the weightings of the forces
+    separateForce.mult(0.8);
+    alignForce.mult(2);
+    cohesionForce.mult(1.5);
 
     this.applyForce(separateForce);
     this.applyForce(alignForce);
