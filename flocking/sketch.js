@@ -1,3 +1,7 @@
+//flocking simulation based on Daniel Shiffman's Nature of Code book:
+//https://natureofcode.com/book/chapter-6-autonomous-agents/
+
+//a single animal animal
 class Boid {
   constructor(x, y) {
     this.position = createVector(x, y);
@@ -12,12 +16,13 @@ class Boid {
     this.cohesionWeight = 1.5;
   }
 
+  //apply a force by changing the acceleration
   applyForce(force) {
     this.acceleration.add(force.div(this.mass));
   }
 
+  //draw a triangle facing the direction of the boid
   draw() {
-    //circle(this.position.x, this.position.y, 10);
     push();
     fill(230);
     translate(this.position.x, this.position.y);
@@ -34,18 +39,20 @@ class Boid {
     this.position.y = this.position.y % height;
   }
 
+  //update the velocity and position of the boid and reset the acceleration
   update() {
     this.velocity.add(this.acceleration);
     this.position.add(this.velocity);
     this.acceleration.mult(0);
   }
 
+  //go towards a specific point.
   seek(desiredPosition) {
     var desiredVelocity = p5.Vector.sub(desiredPosition, this.position);
     desiredVelocity.normalize();
     var distance = p5.Vector.dist(desiredPosition, this.position);
-    if(distance < 100) {
-      desiredVelocity.mult(map(distance, 0, 100, 0, this.maxForce))
+    if(distance < 20) {
+      desiredVelocity.mult(map(distance, 0, 20, 0, this.maxForce))
     } else {
       desiredVelocity.mult(this.maxSpeed);
     }
@@ -54,6 +61,7 @@ class Boid {
     return steer;
   }
 
+  //calculate the steering force to stay separate from other nearby boids
   separate(otherBoids) {
     var desiredSeparation = 40;
     var sum = createVector(0,0);
@@ -79,6 +87,8 @@ class Boid {
     return createVector(0,0);
   }
 
+  //calculate the steering force needed to change velocity to equal the average
+  //of nearby boids
   align(otherBoids) {
     var sum = createVector(0,0);
     var count = 0;
@@ -101,6 +111,7 @@ class Boid {
     return createVector(0,0);
   }
 
+  //calculate the steering force necessary to move towards nearby boids
   cohesion(otherBoids) {
     var sum = createVector(0,0);
     var count = 0;
@@ -119,6 +130,7 @@ class Boid {
     return createVector(0,0);
   }
 
+  //apply the separation, alignment and cohesion forces with their weightings
   applyBehaviours(boidsArray) {
     var separateForce = this.separate(boidsArray);
     var alignForce = this.align(boidsArray);
@@ -135,6 +147,7 @@ class Boid {
   }
 }
 
+//a flock of boids
 class Flock {
   constructor(numBoids) {
     this.boidsArray = [];
@@ -142,17 +155,23 @@ class Flock {
       this.boidsArray.push(new Boid(random(500, 550), random(200, 250)));
     }
   }
+
+  //apply forces and update the state of each boid in the flock
   update() {
     for (let i=0; i<this.boidsArray.length; i++) {
       this.boidsArray[i].applyBehaviours(this.boidsArray);
       this.boidsArray[i].update();
     }
   }
+
+  //draw each boid in the flock
   draw() {
     for (let i=0; i<this.boidsArray.length; i++) {
       this.boidsArray[i].draw();
     }
   }
+
+  //set the weightings of the three behaviours
   set separation (weight) {
     this.boidsArray.forEach((boid) => boid.separationWeight = weight);
   }
@@ -168,15 +187,14 @@ class Flock {
 
 var separationSlider, alignmentSlider, cohesionSlider;
 
-
 function setup() {
   createCanvas(800, 500);
-  flock = new Flock(120);
-  separationSlider = createSlider(0, 3, 0.8, 0.1);
+  flock = new Flock(100);
+  separationSlider = createSlider(0, 3, 1.3, 0.1);
   separationSlider.position(10, height);
-  alignmentSlider = createSlider(0, 3, 2, 0.1);
+  alignmentSlider = createSlider(0, 3, 1.3, 0.1);
   alignmentSlider.position(160, height);
-  cohesionSlider = createSlider(0, 3, 1.5, 0.1);
+  cohesionSlider = createSlider(0, 3, 1, 0.1);
   cohesionSlider.position(320, height);
 }
 
