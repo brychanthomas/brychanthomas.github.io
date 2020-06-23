@@ -6,6 +6,10 @@ class Boid {
     this.mass = 1;
     this.maxSpeed = 5;
     this.maxForce = 0.05;
+
+    this.separationWeight = 0.8;
+    this.alignmentWeight = 2;
+    this.cohesionWeight = 1.5;
   }
 
   applyForce(force) {
@@ -121,9 +125,9 @@ class Boid {
     var cohesionForce = this.cohesion(boidsArray);
 
     //adjust the weightings of the forces
-    separateForce.mult(0.8);
-    alignForce.mult(2);
-    cohesionForce.mult(1.5);
+    separateForce.mult(this.separationWeight);
+    alignForce.mult(this.alignmentWeight);
+    cohesionForce.mult(this.cohesionWeight);
 
     this.applyForce(separateForce);
     this.applyForce(alignForce);
@@ -149,17 +153,41 @@ class Flock {
       this.boidsArray[i].draw();
     }
   }
+  set separation (weight) {
+    this.boidsArray.forEach((boid) => boid.separationWeight = weight);
+  }
+
+  set alignment (weight) {
+    this.boidsArray.forEach((boid) => boid.alignmentWeight = weight);
+  }
+
+  set cohesion (weight) {
+    this.boidsArray.forEach((boid) => boid.cohesionWeight = weight);
+  }
 }
 
-var a;
+var separationSlider, alignmentSlider, cohesionSlider;
+
 
 function setup() {
   createCanvas(800, 500);
-  a = new Flock(80);
+  flock = new Flock(120);
+  separationSlider = createSlider(0, 3, 0.8, 0.1);
+  separationSlider.position(10, height);
+  alignmentSlider = createSlider(0, 3, 2, 0.1);
+  alignmentSlider.position(160, height);
+  cohesionSlider = createSlider(0, 3, 1.5, 0.1);
+  cohesionSlider.position(320, height);
 }
 
 function draw() {
   background(40);
-  a.update();
-  a.draw();
+  text('Separation',10, height-5);
+  text('Alignment',160, height-5);
+  text('Cohesion',320, height-5);
+  flock.separation = separationSlider.value();
+  flock.alignment = alignmentSlider.value();
+  flock.cohesion = cohesionSlider.value();
+  flock.update();
+  flock.draw();
 }
