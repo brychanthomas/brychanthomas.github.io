@@ -19,14 +19,27 @@ class Boid {
   }
 
   update() {
-    //this.applyForce(this.calculateSteeringForce(createVector(mouseX, mouseY)));
     this.velocity.add(this.acceleration);
     this.position.add(this.velocity);
     this.acceleration.mult(0);
   }
 
+  seek(desiredPosition) {
+    var desiredVelocity = p5.Vector.sub(desiredPosition, this.position);
+    desiredVelocity.normalize();
+    var distance = p5.Vector.dist(desiredPosition, this.position);
+    if(distance < 100) {
+      desiredVelocity.mult(map(distance, 0, 100, 0, this.maxForce))
+    } else {
+      desiredVelocity.mult(this.maxSpeed);
+    }
+    var steer = p5.Vector.sub(desiredVelocity, this.velocity);
+    steer.limit(this.maxForce);
+    this.applyForce(steer);
+  }
+
   separate(otherBoids) {
-    var desiredSeparation = 100;
+    var desiredSeparation = 50;
     var sum = createVector(0,0);
     var count = 0;
     for (let boid of otherBoids) {
@@ -60,6 +73,7 @@ class Flock {
   update() {
     for (let i=0; i<this.boidsArray.length; i++) {
       this.boidsArray[i].separate(this.boidsArray);
+      this.boidsArray[i].seek(createVector(mouseX, mouseY));
       this.boidsArray[i].update();
     }
   }
@@ -74,7 +88,7 @@ var a;
 
 function setup() {
   createCanvas(800, 500);
-  a = new Flock(10);
+  a = new Flock(5);
 }
 
 function draw() {
