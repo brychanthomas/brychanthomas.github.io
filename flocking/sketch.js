@@ -13,7 +13,12 @@ class Boid {
   }
 
   draw() {
-    circle(this.position.x, this.position.y, 10);
+    //circle(this.position.x, this.position.y, 10);
+    push();
+    translate(this.position.x, this.position.y);
+    rotate(this.velocity.heading());
+    triangle(0, -6, 0, 6, 15, 0);
+    pop();
     this.position.x = this.position.x % width;
     this.position.y = this.position.y % height;
   }
@@ -63,15 +68,37 @@ class Boid {
     return createVector(0,0);
   }
 
+  align(otherBoids) {
+    var sum = createVector(0,0);
+    var count = 0;
+    var neighbourhoodRadius = 50;
+    for (let boid of otherBoids) {
+      let distance = p5.Vector.dist(this.position, boid.position);
+      if (distance > 0 && distance < neighbourhoodRadius) {
+        sum.add(boid.velocity);
+        count++;
+      }
+    }
+    if (count > 0) {
+      sum.div(count);
+      sum.normalize();
+      sum.mult(this.maxSpeed);
+      var steeringForce = p5.Vector.sub(sum, this.velocity);
+      steeringForce.limit(this.maxForce);
+      return steeringForce;
+    }
+    return createVector(0,0);
+  }
+
   applyBehaviours(boidsArray) {
     var separateForce = this.separate(boidsArray);
-    var seekForce = this.seek(createVector(mouseX, mouseY));
+    var alignForce = this.align(boidsArray);
 
-    separateForce.mult(0.5);
-    seekForce.mult(1.5);
+    separateForce.mult(1);
+    alignForce.mult(1);
 
     this.applyForce(separateForce);
-    this.applyForce(seekForce);
+    this.applyForce(alignForce);
   }
 }
 
@@ -79,7 +106,7 @@ class Flock {
   constructor(numBoids) {
     this.boidsArray = [];
     for (let i=0; i<numBoids; i++) {
-      this.boidsArray.push(new Boid(random(500, 700), random(200, 400)));
+      this.boidsArray.push(new Boid(random(500, 510), random(200, 210)));
     }
   }
   update() {
