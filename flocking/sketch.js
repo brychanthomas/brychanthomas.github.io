@@ -5,7 +5,7 @@ class Boid {
     this.acceleration = createVector(0,0);
     this.mass = 1;
     this.maxSpeed = 7;
-    this.maxForce = 5;
+    this.maxForce = 0.1;
   }
 
   applyForce(force) {
@@ -19,6 +19,12 @@ class Boid {
     rotate(this.velocity.heading());
     triangle(0, -6, 0, 6, 15, 0);
     pop();
+    if (this.position.x < 0) {
+      this.position.x = width-1;
+    }
+    if (this.position.y < 0) {
+      this.position.y = height-1;
+    }
     this.position.x = this.position.x % width;
     this.position.y = this.position.y % height;
   }
@@ -94,7 +100,7 @@ class Boid {
     var separateForce = this.separate(boidsArray);
     var alignForce = this.align(boidsArray);
 
-    separateForce.mult(1);
+    separateForce.mult(0.2);
     alignForce.mult(1);
 
     this.applyForce(separateForce);
@@ -126,7 +132,7 @@ var a;
 
 function setup() {
   createCanvas(800, 500);
-  a = new Flock(5);
+  a = new Flock(20);
 }
 
 function draw() {
