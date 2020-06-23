@@ -4,6 +4,8 @@ class Boid {
     this.velocity = createVector(0, 0);
     this.acceleration = createVector(0,0);
     this.mass = 1;
+    this.maxSpeed = 7;
+    this.maxForce = 0.1;
   }
 
   applyForce(force) {
@@ -17,9 +19,24 @@ class Boid {
   }
 
   update() {
+    this.applyForce(this.calculateSteeringForce(createVector(mouseX, mouseY)));
     this.velocity.add(this.acceleration);
     this.position.add(this.velocity);
     this.acceleration.mult(0);
+  }
+
+  calculateSteeringForce(desiredPosition) {
+    var desiredVel = p5.Vector.sub(desiredPosition, this.position);
+    var d = desiredVel.mag();
+    desiredVel.normalize();
+    if (d < 100) {
+      desiredVel.mult(map(d, 0, 100, 0, this.maxSpeed));
+    } else {
+      desiredVel.mult(this.maxSpeed);
+    }
+    var steeringForce = p5.Vector.sub(desiredVel, this.velocity);
+    steeringForce.limit(this.maxForce);
+    return steeringForce;
   }
 }
 
@@ -32,7 +49,6 @@ function setup() {
 
 function draw() {
   background(200);
-  a.applyForce(createVector(0, 0.05));
   a.update();
   a.display();
 }
