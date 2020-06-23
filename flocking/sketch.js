@@ -35,7 +35,7 @@ class Boid {
     }
     var steer = p5.Vector.sub(desiredVelocity, this.velocity);
     steer.limit(this.maxForce);
-    this.applyForce(steer);
+    return steer;
   }
 
   separate(otherBoids) {
@@ -58,8 +58,20 @@ class Boid {
       sum.mult(this.maxSpeed);
       var steer = p5.Vector.sub(sum, this.velocity);
       steer.limit(this.maxForce);
-      this.applyForce(steer);
+      return steer;
     }
+    return createVector(0,0);
+  }
+
+  applyBehaviours(boidsArray) {
+    var separateForce = this.separate(boidsArray);
+    var seekForce = this.seek(createVector(mouseX, mouseY));
+
+    separateForce.mult(0.5);
+    seekForce.mult(1.5);
+
+    this.applyForce(separateForce);
+    this.applyForce(seekForce);
   }
 }
 
@@ -72,8 +84,7 @@ class Flock {
   }
   update() {
     for (let i=0; i<this.boidsArray.length; i++) {
-      this.boidsArray[i].separate(this.boidsArray);
-      this.boidsArray[i].seek(createVector(mouseX, mouseY));
+      this.boidsArray[i].applyBehaviours(this.boidsArray);
       this.boidsArray[i].update();
     }
   }
