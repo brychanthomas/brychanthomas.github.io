@@ -33,3 +33,25 @@ function updateGauges() {
     document.getElementById("output-p").innerHTML =
         (ill_frac * 100).toFixed(4) + "% of the population is currently ill.<br>\n  There is a " + (probability * 100).toFixed(2) + "% chance that at least one person has Covid-19.<br>\n  There is a " + (asymptom_probability * 100).toFixed(2) + "% probability that at least one person is\n  an asymptomatic carrier.";
 }
+function changeInputMethod() {
+    if (document.getElementById("cases-per-week-radio").checked) {
+        var elements = document.getElementsByClassName("per-week-inputs");
+        for (var i = 0; i < elements.length; i++) {
+            elements[i].style.display = "inline-block";
+        }
+        elements = document.getElementsByClassName("active-cases-inputs");
+        for (var i = 0; i < elements.length; i++) {
+            elements[i].style.display = "none";
+        }
+    }
+    else {
+        var elements = document.getElementsByClassName("per-week-inputs");
+        for (var i = 0; i < elements.length; i++) {
+            elements[i].style.display = "none";
+        }
+        elements = document.getElementsByClassName("active-cases-inputs");
+        for (var i = 0; i < elements.length; i++) {
+            elements[i].style.display = "inline-block";
+        }
+    }
+}

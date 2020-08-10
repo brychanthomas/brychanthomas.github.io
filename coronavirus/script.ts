@@ -41,3 +41,26 @@ function updateGauges() {
   There is a ${(asymptom_probability*100).toFixed(2)}% probability that at least one person is
   an asymptomatic carrier.`
 }
+
+function changeInputMethod() {
+  if ((<HTMLInputElement>document.getElementById("cases-per-week-radio")).checked) {
+    var elements = document.getElementsByClassName("per-week-inputs");
+    for (var i = 0; i < elements.length; i++) {
+      (<HTMLElement>elements[i]).style.display = "inline-block";
+    }
+    elements = document.getElementsByClassName("active-cases-inputs");
+    for (var i = 0; i < elements.length; i++) {
+      (<HTMLElement>elements[i]).style.display = "none";
+    }
+  }
+  else {
+    var elements = document.getElementsByClassName("per-week-inputs");
+    for (var i = 0; i < elements.length; i++) {
+      (<HTMLElement>elements[i]).style.display = "none";
+    }
+    elements = document.getElementsByClassName("active-cases-inputs");
+    for (var i = 0; i < elements.length; i++) {
+      (<HTMLElement>elements[i]).style.display = "inline-block";
+    }
+  }
+}
