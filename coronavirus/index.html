@@ -19,6 +19,9 @@
     border-style: ridge;
     margin-bottom: 20px;
   }
+  .active-cases-inputs {
+    display: none;
+  }
   #formdiv {
     float: left;
   }
@@ -32,7 +35,7 @@
     <div class="divider">
       <form onchange="changeInputMethod()">
         <p style="margin: 7px">Enter case numbers by:</p>
-        <input type="radio" id="cases-per-week-radio" name="input-method">
+        <input type="radio" id="cases-per-week-radio" name="input-method" checked>
         <label for="cases-per-week-radio">Cases in past week</label>
         <br>
         <input type="radio" id="active-cases-radio" name="input-method">
@@ -41,12 +44,16 @@
     </div>
     <form onchange="updateGauges();" style="padding-top:20px;">
       <div class="divider">
-        <label for="cases-per-week" class="form-label">
+        <label for="cases-per-week" class="form-label per-week-inputs">
           Cases confirmed in last week:
         </label>
-        <input type="number" id="cases-per-week" min=0>
+        <input type="number" id="cases-per-week" min=0 class="per-week-inputs">
+        <label for="active-cases" class="form-label active-cases-inputs">
+          Active cases:
+        </label>
+        <input type="number" id="active-cases" min=0 class="active-cases-inputs">
         <br><br>
-        <label for="population"class="form-label">
+        <label for="population" class="form-label">
           Population:
         </label>
         <input type="number" id="population" min=1>
@@ -62,10 +69,10 @@
         </label>
         <input type="number" id="asymptomatic" value=50 min=0 max=100>
         <br><br>
-        <label for="length" class="form-label">
+        <label for="length" class="form-label per-week-inputs">
           Symptoms length (days):
         </label>
-        <input type="number" id="length" value=10 min=0>
+        <input type="number" id="length" value=10 min=0 class="per-week-inputs">
       </div>
     </form>
     <div class="divider" style="border-color: red;">
