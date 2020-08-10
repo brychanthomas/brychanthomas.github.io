@@ -5,7 +5,7 @@ function calculateFractionIll(population, daily_cases, length) {
     var ill = daily_cases * length;
     return ill / population;
 }
-function getInputs() {
+function getWeeklyInputs() {
     var population_input = document.getElementById("population");
     var population = Number(population_input.value);
     var weekly_cases_input = document.getElementById("cases-per-week");
@@ -20,9 +20,29 @@ function getInputs() {
     return [population, daily_cases, symptoms_length,
         asymptomatic_frac, gathering_size];
 }
+function getActiveInputs() {
+    var population_input = document.getElementById("population");
+    var population = Number(population_input.value);
+    var active_input = document.getElementById("active-cases");
+    var active_cases = Number(active_input.value);
+    var asymptomatic_input = document.getElementById("asymptomatic");
+    var asymptomatic_frac = Number(asymptomatic_input.value) / 100;
+    var gathering_input = document.getElementById("gathering-size");
+    var gathering_size = Number(gathering_input.value);
+    return [population, active_cases, asymptomatic_frac, gathering_size];
+}
+function getInputs() {
+    if (document.getElementById("cases-per-week-radio").checked) {
+        var _a = getWeeklyInputs(), population = _a[0], daily = _a[1], length = _a[2], asymptomatic = _a[3], gathering = _a[4];
+        var ill_frac = calculateFractionIll(population, daily, length);
+        return [ill_frac, asymptomatic, gathering];
+    }
+    var _b = getActiveInputs(), population = _b[0], active = _b[1], asymptomatic = _b[2], gathering = _b[3];
+    var ill_frac = active / population;
+    return [ill_frac, asymptomatic, gathering];
+}
 function updateGauges() {
-    var _a = getInputs(), population = _a[0], daily = _a[1], length = _a[2], asymptomatic = _a[3], gathering = _a[4];
-    var ill_frac = calculateFractionIll(population, daily, length);
+    var _a = getInputs(), ill_frac = _a[0], asymptomatic = _a[1], gathering = _a[2];
     if (isNaN(ill_frac) || isNaN(gathering)) {
         return;
     }

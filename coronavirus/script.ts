@@ -11,7 +11,7 @@ function calculateFractionIll(population:number, daily_cases:number, length:numb
   return ill / population;
 }
 
-function getInputs() {
+function getWeeklyInputs() {
   var population_input = document.getElementById("population");
   var population = Number((<HTMLInputElement>population_input).value);
   var weekly_cases_input = document.getElementById("cases-per-week");
@@ -27,9 +27,32 @@ function getInputs() {
     asymptomatic_frac, gathering_size];
 }
 
+function getActiveInputs() {
+  var population_input = document.getElementById("population");
+  var population = Number((<HTMLInputElement>population_input).value);
+  var active_input = document.getElementById("active-cases");
+  var active_cases = Number((<HTMLInputElement>active_input).value);
+  var asymptomatic_input = document.getElementById("asymptomatic");
+  var asymptomatic_frac = Number((<HTMLInputElement>asymptomatic_input).value) / 100;
+  var gathering_input = document.getElementById("gathering-size");
+  var gathering_size = Number((<HTMLInputElement>gathering_input).value);
+  return [population, active_cases, asymptomatic_frac, gathering_size];
+}
+
+function getInputs() {
+  if ((<HTMLInputElement>document.getElementById("cases-per-week-radio")).checked) {
+    var [population, daily, length,
+      asymptomatic, gathering] = getWeeklyInputs();
+    var ill_frac = calculateFractionIll(population, daily, length);
+    return [ill_frac, asymptomatic, gathering]
+  }
+  var [population, active, asymptomatic, gathering] = getActiveInputs();
+  var ill_frac = active / population;
+  return [ill_frac, asymptomatic, gathering];
+}
+
 function updateGauges() {
-  var [population, daily, length, asymptomatic, gathering] = getInputs();
-  var ill_frac = calculateFractionIll(population, daily, length);
+  var [ill_frac, asymptomatic, gathering] = getInputs();
   if (isNaN(ill_frac) || isNaN(gathering)) { return; }
   var probability = calculateProbability(ill_frac, gathering);
   var asymptom_probability = calculateProbability(ill_frac*asymptomatic, gathering);

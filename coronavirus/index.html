@@ -33,7 +33,7 @@
 <body>
   <div id="formdiv">
     <div class="divider">
-      <form onchange="changeInputMethod()">
+      <form onchange="changeInputMethod();updateGauges()">
         <p style="margin: 7px">Enter case numbers by:</p>
         <input type="radio" id="cases-per-week-radio" name="input-method" checked>
         <label for="cases-per-week-radio">Cases in past week</label>
