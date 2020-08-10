@@ -9,7 +9,7 @@
   }
   label {
     display: inline-block;
-    width:220px;
+    width: 220px;
     text-align: right;
   }
   .divider {
@@ -29,6 +29,16 @@
 </head>
 <body>
   <div id="formdiv">
+    <div class="divider">
+      <form onchange="changeInputMethod()">
+        <label>Enter case numbers by:</label><br>
+        <input type="radio" id="cases-per-week-radio" name="input-method">
+        <label for="cases-per-week-radio">Cases in past week</label>
+        <br>
+        <input type="radio" id="active-cases-radio" name="input-method">
+        <label for="active-cases-radio">Current active cases</label>
+      </form>
+    </div>
     <form onchange="updateGauges();" style="padding-top:20px;">
       <div class="divider">
         <label for="cases-per-week">Cases confirmed in last week:</label>
