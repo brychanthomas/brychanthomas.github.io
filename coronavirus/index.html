@@ -1,0 +1,96 @@
+<html>
+<head>
+  <script src="https://cdn.rawgit.com/Mikhus/canvas-gauges/gh-pages/download/2.1.7/linear/gauge.min.js"></script>
+  <script src="script.js"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+  body {
+    font-family: Tahoma, Geneva, sans-serif;
+  }
+  label {
+    display: inline-block;
+    width:220px;
+    text-align: right;
+  }
+  .divider {
+    border-width: 2px;
+    border-color: grey;
+    padding: 7px;
+    border-style: ridge;
+    margin-bottom: 20px;
+  }
+  #formdiv {
+    float: left;
+  }
+  #gaugediv {
+    display: inline-block;
+  }
+  </style>
+</head>
+<body>
+  <div id="formdiv">
+    <form onchange="updateGauges();" style="padding-top:20px;">
+      <div class="divider">
+        <label for="cases-per-week">Cases confirmed in last week:</label>
+        <input type="number" id="cases-per-week" min=0>
+        <br><br>
+        <label for="population">Population:</label>
+        <input type="number" id="population" min=1>
+        <br><br>
+        <label for="gathering-size" style="font-weight:bold">Gathering size:</label>
+        <input type="number" id="gathering-size" min=0>
+      </div>
+      <div class="divider" style="border-color: lightgrey; color: grey;">
+        <label for="asymptomatic">% who are asymptomatic:</label>
+        <input type="number" id="asymptomatic" value=50 min=0 max=100>
+        <br><br>
+        <label for="length">Symptoms length (days):</label>
+        <input type="number" id="length" value=10 min=0>
+      </div>
+    </form>
+    <div class="divider" style="border-color: red;">
+      <p id="output-p"></p>
+    </div>
+  </div>
+  <div id="gaugediv">
+    <canvas data-type="linear-gauge"
+      data-title="P(≥1 infected)"
+      data-width="180"
+      data-height="350"
+      data-units="%"
+      data-min-value="0"
+      data-max-value="100"
+      data-major-ticks="0,10,20,30,40,50,60,70,80,90,100"
+      data-number-side="right"
+      data-ticks-width="10"
+      data-ticks-width-minor="5"
+      data-bar-begin-circle="false"
+      data-value="0"
+      data-color-bar-progress="rgba(200,50,50,.75)"
+      data-border-shadow-width="0"
+      data-borders="false"
+      data-highlights='[]'
+      data-needle-type="arrow"
+    ></canvas>
+    <canvas data-type="linear-gauge"
+      data-title="P(≥1 asymptomatic)"
+      data-width="180"
+      data-height="350"
+      data-units="%"
+      data-min-value="0"
+      data-max-value="100"
+      data-major-ticks="0,10,20,30,40,50,60,70,80,90,100"
+      data-number-side="right"
+      data-ticks-width="10"
+      data-ticks-width-minor="5"
+      data-bar-begin-circle="false"
+      data-value="0"
+      data-color-bar-progress="rgba(200,50,50,.75)"
+      data-border-shadow-width="0"
+      data-borders="false"
+      data-highlights='[]'
+      data-needle-type="arrow"
+    ></canvas>
+  </div>
+</body>
+</html>
